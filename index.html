@@ -146,11 +146,11 @@
             </div>
             <div class="form-group">
                 <label for="dataNascimento">Data de Nascimento:</label>
-                <input type="date" id="dataNascimento">
+                <input type="text" id="dataNascimento" placeholder="DD/MM/AAAA" maxlength="10">
             </div>
             <div class="form-group">
                 <label for="cpfCnpj">CPF/CNPJ do Signatário:</label>
-                <input type="text" id="cpfCnpj" placeholder="Digite o CPF ou CNPJ">
+                <input type="text" id="cpfCnpj" placeholder="Digite o CPF ou CNPJ" maxlength="18">
             </div>
             <button type="button" onclick="gerarAtestado()">Gerar Atestado</button>
         </form>
@@ -223,6 +223,43 @@
     <a href="index.html" class="voltar" style="display: none; margin-top: 20px;" id="btnVoltar">Voltar</a>
 
     <script>
+        // Máscara para CPF/CNPJ
+        document.getElementById('cpfCnpj').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length <= 11) {
+                // Formata como CPF (000.000.000-00)
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            } else {
+                // Formata como CNPJ (00.000.000/0000-00)
+                value = value.replace(/^(\d{2})(\d)/, '$1.$2');
+                value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+                value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
+                value = value.replace(/(\d{4})(\d)/, '$1-$2');
+            }
+            
+            e.target.value = value;
+        });
+
+        // Máscara para data de nascimento (DD/MM/AAAA)
+        document.getElementById('dataNascimento').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length > 2) {
+                value = value.replace(/^(\d{2})/, '$1/');
+            }
+            if (value.length > 5) {
+                value = value.replace(/^(\d{2})\/(\d{2})/, '$1/$2/');
+            }
+            if (value.length > 10) {
+                value = value.substring(0, 10);
+            }
+            
+            e.target.value = value;
+        });
+
         function gerarAtestado() {
             // Obter valores do formulário
             const numeroDocumento = document.getElementById('numeroDocumento').value;
@@ -238,7 +275,7 @@
             document.getElementById('nomeCompleto').textContent = `Nome: ${nome ? nome.toUpperCase() : ''}`;
             document.getElementById('nomeMaeAtestado').textContent = `Nome da mãe: ${nomeMae ? nomeMae.toUpperCase() : ''}`;
             document.getElementById('nomePaiAtestado').textContent = `Nome do pai: ${nomePai ? nomePai.toUpperCase() : ''}`;
-            document.getElementById('dataNascimentoAtestado').textContent = `Data de Nascimento: ${dataNascimento ? formatarData(dataNascimento) : ''}`;
+            document.getElementById('dataNascimentoAtestado').textContent = `Data de Nascimento: ${dataNascimento || ''}`;
             
             // Obter data e hora atual
             const dataHoraAtual = new Date();
@@ -248,7 +285,7 @@
             
             // Preencher dados de assinatura
             document.getElementById('nomeAssinante').textContent = nome ? nome.toUpperCase() : '';
-            document.getElementById('cpfCnpjAssinante').textContent = cpfCnpj ? formatarCpfCnpj(cpfCnpj) : '';
+            document.getElementById('cpfCnpjAssinante').textContent = cpfCnpj || '';
             document.getElementById('dataAssinatura').textContent = dataEmissao;
             
             // Gerar QR code com dados do documento
@@ -265,8 +302,8 @@
         }
         
         function formatarData(data) {
-            const partes = data.split('-');
-            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+            const partes = data.split('/');
+            return `${partes[0]}/${partes[1]}/${partes[2]}`;
         }
         
         function formatarDataCompleta(data) {

@@ -1,0 +1,310 @@
+* {
+    font-family: sans-serif;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200vh;
+    flex-direction: column;
+
+    button, .voltar {
+        background-color: rgb(0, 255, 85);
+        margin-top: 10%;
+        padding: 1% 2%;
+        border-radius: 10px;
+        font-size: 1.5rem;
+        color: white;
+    }
+}
+
+.content {
+    border: 2px solid black;
+    border-radius: 8px;
+    width: 50%;
+    background-color: white;
+    z-index: -2;
+}
+
+.header {
+    padding: 5%;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1rem;
+    align-items: center;
+
+    div {
+        width: 12.5%;
+    }
+
+    img {
+        width: 100%;
+    }
+}
+
+hr {
+    margin: auto;
+    width: 90%;
+}
+
+.conteudo-corpo {
+    background-color: rgb(255, 255, 255);
+    background-image: url('banner_antecedentes.png');
+    position: relative;
+    margin: auto;
+    margin-top: 10px;
+    width: 90%;
+    padding-bottom: 10%;
+    z-index: -2;
+    text-align: center;
+}
+
+.marca_agua {
+    z-index: -1;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+
+    img {
+        width: 80%;
+    }
+}
+
+.dados {
+    z-index: 1;
+
+    div {
+        margin-top: 5%;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+        padding-top: 5%;
+    }
+
+    .n, .n2 {
+        margin-top: 5%;
+    }
+
+    .n {
+        font-weight: 500;
+        font-size: 1.5rem;
+    }
+
+    .n2 {
+        font-size: 1.3rem;
+        text-indent: 10%;
+        text-align: justify;
+    }
+
+    .informações {
+        margin: auto;
+        margin-top: 10%;
+        text-align: left;
+        font-weight: 700;
+        font-size: 1.2rem;
+        width: 80%;
+    }
+
+    .d123 {
+        p {
+            font-size: 1.3rem;
+            margin: 10px;
+        }
+    }
+
+    .Observações {
+        text-align: left;
+
+        p {
+            font-size: 1.15rem;
+            margin-top: 15px;
+            margin-bottom: 15px;
+
+            a {
+                text-decoration: none;
+                color: black;
+            }
+        }
+    }
+}
+
+.assinatura-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #ccc;
+    width: 100%;
+}
+
+.qr-code-section {
+    width: 40%;
+    text-align: center;
+
+    p {
+        font-size: 1.2rem;
+        margin: 10px 0;
+    }
+
+    img {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto;
+        display: block;
+    }
+}
+
+.dados-assinatura {
+    width: 55%;
+    border: 1px solid #000;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.imagem-assinatura img {
+    max-width: 200px;
+    max-height: 80px;
+    margin-bottom: 15px;
+}
+
+.campo-assinatura {
+    margin-bottom: 10px;
+
+    p {
+        margin: 5px 0;
+        font-size: 1.1rem;
+    }
+}
+
+.nome-assinante, .cpf-cnpj, .data-assinatura {
+    font-size: 1.2rem;
+}
+
+@media print {
+    body {
+        min-height: auto !important;
+        display: block !important;
+    }
+    
+    .content {
+        width: 100% !important;
+        border: none !important;
+        box-shadow: none !important;
+
+        hr {
+            width: 100% !important;
+        }
+    }
+    
+    .conteudo-corpo {
+        background-image: none !important;
+        margin: 0 !important;
+        padding: 0 5% 5% 5% !important;
+        width: 90% !important;
+    }
+    
+    .header {
+        padding: 2% !important;
+    }
+    
+    .marca_agua img {
+        opacity: 0.1 !important;
+    }
+    
+    button {
+        display: none !important;
+    }
+    
+    .assinatura-container {
+        page-break-inside: avoid !important;
+    }
+    
+    .dados-assinatura {
+        border: 1px solid #000 !important;
+    }
+    
+    .qr-code-section img {
+        width: 150px !important;
+        height: 150px !important;
+    }
+    
+    .imagem-assinatura img {
+        max-width: 200px !important;
+        max-height: 80px !important;
+    }
+}
+
+/* Responsividade para celulares */
+@media (max-width: 480px) {
+    .form-container {
+        max-width: 95%;
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .form-container h1 {
+        font-size: 20px;
+        margin-bottom: 18px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+
+    .form-group input {
+        padding: 10px;
+        font-size: 14px;
+        border-radius: 5px;
+    }
+
+    button {
+        padding: 12px 16px;
+        font-size: 16px;
+        border-radius: 6px;
+    }
+    
+    .assinatura-container {
+        flex-direction: column;
+    }
+    
+    .qr-code-section, .dados-assinatura {
+        width: 100% !important;
+    }
+    
+    .dados-assinatura {
+        margin-top: 20px;
+    }
+}
+
+/* Ajustes para telas muito pequenas */
+@media (max-width: 360px) {
+    .form-container {
+        padding: 12px;
+    }
+
+    .form-container h1 {
+        font-size: 18px;
+    }
+
+    .form-group input {
+        padding: 8px 10px;
+    }
+
+    button {
+        padding: 10px 14px;
+        font-size: 15px;
+    }
+}
