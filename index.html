@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Atestado de Antecedentes</title>
+    <link rel="stylesheet" href="index.css">
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+                margin: 0;
+                padding: 0;
+            }
+            #conteudoParaImprimir, #conteudoParaImprimir * {
+                visibility: visible;
+            }
+            #conteudoParaImprimir {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                border: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .content {
+                width: 100% !important;
+                border: none !important;
+            }
+            hr {
+                display: block !important;
+                margin-bottom: 10px !important;
+                width: 80% !important;
+            }
+            .conteudo-corpo {
+                height: 10% !important;
+                margin: 0 !important;
+                padding: 0 5% 5% 5% !important;
+                width: 90% !important;
+                background-image: url('banner_antecedentes.png') !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .header {
+                padding: 2% !important;
+            }
+            .marca_agua {
+                position: absolute !important;
+                top: 20% !important;
+                height: 10% !important;
+            }
+            .marca_agua img {
+                width: 70% !important;
+                opacity: 1 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .form-container, button, .voltar {
+                display: none !important;
+            }
+            .assinatura-container {
+                display: flex !important;
+                page-break-inside: avoid !important;
+                width: 100% !important;
+            }
+            .dados-assinatura {
+                border: 1px solid #000 !important;
+            }
+            .qr-code-section img {
+                width: 150px !important;
+                height: 150px !important;
+            }
+            .imagem-assinatura img {
+                max-width: 200px !important;
+                max-height: 80px !important;
+            }
+        }
+        
+        .form-container {
+            width: 100%;
+            max-width: 600px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: rgb(0, 255, 85);
+            margin-top: 10px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Preencha os Dados para o Atestado</h1>
+        <form id="formAtestado">
+            <div class="form-group">
+                <label for="numeroDocumento">Número do Documento:</label>
+                <input type="text" id="numeroDocumento">
+            </div>
+            <div class="form-group">
+                <label for="nome">Nome Completo:</label>
+                <input type="text" id="nome">
+            </div>
+            <div class="form-group">
+                <label for="nomeMae">Nome da Mãe:</label>
+                <input type="text" id="nomeMae">
+            </div>
+            <div class="form-group">
+                <label for="nomePai">Nome do Pai:</label>
+                <input type="text" id="nomePai">
+            </div>
+            <div class="form-group">
+                <label for="dataNascimento">Data de Nascimento:</label>
+                <input type="date" id="dataNascimento">
+            </div>
+            <div class="form-group">
+                <label for="cpfCnpj">CPF/CNPJ do Signatário:</label>
+                <input type="text" id="cpfCnpj" placeholder="Digite o CPF ou CNPJ">
+            </div>
+            <button type="button" onclick="gerarAtestado()">Gerar Atestado</button>
+        </form>
+    </div>
+
+    <div class="content" id="conteudoParaImprimir" style="display: none;">
+        <div class="header">
+            <div><img src="logo_delegacia_online_pc_redimencionado.jpg" alt="Logo Polícia Civil"></div>
+            <p>ESTADO DO ESPÍRITO SANTO <br>SECRETARIA DE ESTADO DE SEGURANÇA PÚBLICA E DEFESA SOCIAL <br>POLÍCIA CIVIL <br>SUPERINTENDÊNCIA DE POLÍCIA TÉCNICO CIENTÍFICA <br>DEPARTAMENTO DE IDENTIFICAÇÃO</p>
+            <div><img src="brasao_es.png" alt="Brasão ES"></div>
+        </div>
+        <hr>
+        <div class="conteudo-corpo">
+            <div class="marca_agua">
+                <img src="MarcaDagua.png" alt="Marca d'água">
+            </div>
+            <div class="dados">
+                <h1>ATESTADO DE ANTECEDENTES CRIMINAIS</h1>
+                <p class="n" id="numeroDocumentoAtestado">DOCUMENTO: Nº </p>
+                <p class="n2" id="textoNadaConsta">TESTO que no banco de dados do Departamento de Identificação da Polícia Civil do Estado do Espírito Santo, até a presente data, <strong>NADA CONSTA</strong> contra: </p>
+                <div class="informações">
+                    <p id="nomeCompleto">Nome:</p>
+                    <p id="nomeMaeAtestado">Nome da mãe:</p>
+                    <p id="nomePaiAtestado">Nome do pai:</p>
+                    <p id="dataNascimentoAtestado">Data de Nascimento:</p>
+                </div>
+                <div class="d123">
+                    <p id="dataHoraEmissao">Documento emitido no dia às</p>
+                    <p><strong>VÁLIDO SOMENTE COM A APRESENTAÇÃO DO DOCUMENTO <br>UTILIZADO PARA A CONSULTA.</strong></p>
+                    <p>ESTE DOCUMENTO É DE VALOR TRANSITÓRIO (60 DIAS)</p>
+                    <p><strong>Verificador:</strong></p>
+                </div>
+                <div class="Observações">
+                    <p>a) Esta certidão foi expedida com base nos dados informados e somente será válida com a apresentação do documento de identificação utilizado para emissão deste atestado;</p>
+                    <p><strong>b) Verifique, antes de apresentar ou aceitar esta certidão, se os nomes foram informados de acordo com o documento apresentado;</strong></p>
+                    <p>c) Certidão expedida gratuitamente através da Internet;</p>
+                    <p>d) A autenticidade desta certidão poderá ser confirmada na página da Secretaria de Segurança Pública e do Estado do Espírito Santo -
+                    <a href="https://www.sesp.es.gov.br" target="_blank">www.sesp.es.gov.br</a> - na opção "Serviços" &gt; "Validar Atestado de Antecedentes", o verificador de autenticidade acima identificado;</p>
+                    <p>e) Ressaltamos que isto não implica a existência de pendências jurídico-criminais. Pode existir uma incorreta identificação por erro de digitação, acentuação ou duplicidade de informações nos nossos arquivos.</p>
+                </div>
+                <div class="assinatura-container">
+                    <div class="qr-code-section">
+                        <p><strong>DOCUMENTO DIGITAL AUTENTICADO</strong></p>
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.sesp.es.gov.br/validar-antecedentes" alt="QR Code de Autenticação" id="qrCode">
+                        <p>Escaneie este código para verificar a autenticidade</p>
+                    </div>
+                    <div class="dados-assinatura">
+                        <div class="imagem-assinatura">
+                            <img src="Gov.png" alt="Assinatura Digital">
+                        </div>
+                        <div class="campo-assinatura">
+                            <p>Assinado digitalmente por:</p>
+                            <p class="nome-assinante"><strong id="nomeAssinante"></strong></p>
+                        </div>
+                        <div class="campo-assinatura">
+                            <p>CPF/CNPJ:</p>
+                            <p class="cpf-cnpj"><strong id="cpfCnpjAssinante"></strong></p>
+                        </div>
+                        <div class="campo-assinatura">
+                            <p>Data da assinatura:</p>
+                            <p class="data-assinatura"><strong id="dataAssinatura"></strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="imprimirDiv()" style="display: none; margin-top: 20px;" id="btnImprimir">Imprimir Atestado</button>
+    <a href="index.html" class="voltar" style="display: none; margin-top: 20px;" id="btnVoltar">Voltar</a>
+
+    <script>
+        function gerarAtestado() {
+            // Obter valores do formulário
+            const numeroDocumento = document.getElementById('numeroDocumento').value;
+            const nome = document.getElementById('nome').value;
+            const nomeMae = document.getElementById('nomeMae').value;
+            const nomePai = document.getElementById('nomePai').value;
+            const dataNascimento = document.getElementById('dataNascimento').value;
+            const cpfCnpj = document.getElementById('cpfCnpj').value;
+            
+            // Preencher o atestado
+            document.getElementById('numeroDocumentoAtestado').textContent = `DOCUMENTO: Nº ${numeroDocumento || ''}`;
+            document.getElementById('textoNadaConsta').innerHTML = `TESTO que no banco de dados do Departamento de Identificação da Polícia Civil do Estado do Espírito Santo, até a presente data, <strong>NADA CONSTA</strong> contra: ${nome ? nome.toUpperCase() : ''}`;
+            document.getElementById('nomeCompleto').textContent = `Nome: ${nome ? nome.toUpperCase() : ''}`;
+            document.getElementById('nomeMaeAtestado').textContent = `Nome da mãe: ${nomeMae ? nomeMae.toUpperCase() : ''}`;
+            document.getElementById('nomePaiAtestado').textContent = `Nome do pai: ${nomePai ? nomePai.toUpperCase() : ''}`;
+            document.getElementById('dataNascimentoAtestado').textContent = `Data de Nascimento: ${dataNascimento ? formatarData(dataNascimento) : ''}`;
+            
+            // Obter data e hora atual
+            const dataHoraAtual = new Date();
+            const dataEmissao = formatarDataCompleta(dataHoraAtual);
+            const horaEmissao = formatarHora(dataHoraAtual);
+            document.getElementById('dataHoraEmissao').textContent = `Documento emitido no dia ${dataEmissao} às ${horaEmissao}`;
+            
+            // Preencher dados de assinatura
+            document.getElementById('nomeAssinante').textContent = nome ? nome.toUpperCase() : '';
+            document.getElementById('cpfCnpjAssinante').textContent = cpfCnpj ? formatarCpfCnpj(cpfCnpj) : '';
+            document.getElementById('dataAssinatura').textContent = dataEmissao;
+            
+            // Gerar QR code com dados do documento
+            const qrData = `https://www.sesp.es.gov.br/validar-antecedentes?doc=${numeroDocumento}&nome=${encodeURIComponent(nome)}&data=${dataEmissao}`;
+            document.getElementById('qrCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrData)}`;
+            
+            // Mostrar o atestado e os botões
+            document.querySelector('.content').style.display = 'block';
+            document.getElementById('btnImprimir').style.display = 'block';
+            document.getElementById('btnVoltar').style.display = 'block';
+            
+            // Rolar até o atestado
+            document.querySelector('.content').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function formatarData(data) {
+            const partes = data.split('-');
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+        
+        function formatarDataCompleta(data) {
+            const dia = String(data.getDate()).padStart(2, '0');
+            const mes = String(data.getMonth() + 1).padStart(2, '0');
+            const ano = data.getFullYear();
+            return `${dia}/${mes}/${ano}`;
+        }
+        
+        function formatarHora(data) {
+            const horas = String(data.getHours()).padStart(2, '0');
+            const minutos = String(data.getMinutes()).padStart(2, '0');
+            return `${horas}h${minutos}min`;
+        }
+        
+        function formatarCpfCnpj(valor) {
+            if (!valor) return '';
+            
+            // Remove tudo que não é dígito
+            const numeros = valor.replace(/\D/g, '');
+            
+            if (numeros.length === 11) {
+                return numeros.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+            } else if (numeros.length === 14) {
+                return numeros.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+            }
+            
+            return valor; // Retorna sem formatação se não for CPF nem CNPJ
+        }
+        
+        function imprimirDiv() {
+            window.print();
+        }
+    </script>
+</body>
+</html>
